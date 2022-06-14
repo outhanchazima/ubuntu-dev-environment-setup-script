@@ -22,6 +22,7 @@ sudo apt update -y && sudo apt dist-upgrade -y && sudo apt upgrade -y
 
 # Installing build essentials
 sudo apt install -y build-essential libssl-dev libffi-dev python3-dev
+udo apt -y install apt-transport-https ca-certificates gnupg-agent software-properties-common
 
 # install curl and wget
 sudo apt install -y wget unzip curl
@@ -52,3 +53,36 @@ sudo apt -y install postgresql
 
 # Generate ssh keys for the user
 # ssh-keygen -t rsa -b 4096 -C "
+
+# Installing Redis Server
+sudo apt install -y redis-server
+
+# Installing nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+
+# Installing docker
+sudo apt remove docker docker-engine docker.io containerd runc
+# import gpg key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-archive-keyring.gpg
+# add docker repository
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+# update package list
+sudo apt update
+# install docker
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+# add user to docker group
+sudo usermod -aG docker $USER
+newgrp docker
+ 
+# Installing docker-compose
+curl -s https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url  | grep docker-compose-linux-x86_64 | cut -d '"' -f 4 | wget -qi -
+chmod +x docker-compose-linux-x86_64
+sudo mv docker-compose-linux-x86_64 /usr/local/bin/docker-compose
+sudo mv docker-compose-linux-x86_64 /usr/local/bin/docker-compose
+sudo usermod -aG docker $USER
+newgrp docker
+
+# Installing NodeJS
